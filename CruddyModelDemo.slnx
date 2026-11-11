@@ -1,0 +1,24 @@
+<Solution>
+  <Folder Name="/.github/">
+    <File Path=".github/copilot-instructions.md" />
+  </Folder>
+  <Folder Name="/.github/workflows/">
+    <File Path=".github/copilot-instructions.md" />
+    <File Path=".github/workflows/dotnet.yml" />
+  </Folder>
+  <Folder Name="/Docs/">
+    <File Path="Docs/Create.png" />
+    <File Path="Docs/Delete.png" />
+    <File Path="Docs/Details.png" />
+    <File Path="Docs/Edit.png" />
+    <File Path="Docs/TableCustomers.png" />
+    <File Path="Docs/TableCustomersCruddy.png" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="LICENSE.txt" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="CruddyModelDemo/CruddyModelDemo.csproj" />
+  <Project Path="Lindekilde.Blazor.CruddyModel.Tests/Lindekilde.Blazor.CruddyModel.Tests.csproj" Id="a1b15fb4-f022-4fb1-9f5c-d53f19b5716e" />
+  <Project Path="Lindekilde.Blazor.CruddyModel/Lindekilde.Blazor.CruddyModel.csproj" Id="4ebafc52-177f-4300-8ad7-36d1dbda277e" />
+</Solution>

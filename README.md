@@ -1,23 +1,26 @@
-# Cruddy
+# CruddyModel
 
-Why Cruddy? -I needed a simple component that could do CRUD operations on any database table.
+Why CruddyModel? -I needed a simple component that could do CRUD operations on any database table.
 I wanted to be able to use it with any class or record. It had to use Dapper for database operations. 
+
+NOTE: See also the twin component Cruddy that works without a model class: 
+https://github.com/JakobLindekilde/Cruddy
 
 ## Overview
 
-- Cruddy is an ASP.NET Blazor component that does CRUD operations on any table in any database
-- Cruddy is based on the Microsoft QuickGrid component
-- Cruddy requires a model class or record
+- CruddyModel is an ASP.NET Blazor component that does CRUD operations on any table in any database
+- CruddyModel is based on the Microsoft QuickGrid component
+- CruddyModel requires a model class or record
 - When editing or creating validation is done based on the class properties and attributes (DataAnnotations) 
 - The model class/record properties do not need to match the database table columns
-- Cruddy uses Dapper - not Entity Framework
-- Cruddy will generate the appropriate CRUD SQL statements
-- Cruddy does not use any non-Microsoft NuGet packages (except for Dapper)
-- Foreign keys are handled by Cruddy - See the FKeys parameter in the table below
+- CruddyModel uses Dapper - not Entity Framework
+- CruddyModel will generate the appropriate CRUD SQL statements
+- CruddyModel does not use any non-Microsoft NuGet packages (except for Dapper)
+- Foreign keys are handled by CruddyModel - See the FKeys parameter in the table below
 
 ## How to contribute
 
-You can contribute to Cruddy by creating a pull request on GitHub.
+You can contribute to CruddyModel by creating a pull request on GitHub.
 Please follow normal/typical coding standards and include tests for changes and new features.
 
 Please run the tests locally: You need to set up a local database with the provided SQL script. 
@@ -30,15 +33,15 @@ Else the database tests will not be run. I have not set up a test database in Gi
 - Make final NuGet package (beta prerelease is available on nuget.org now)
 
 ## Examples 
-Note: There are more examples in the CruddyDemo project.
+Note: There are more examples in the CruddyModelDemo project.
 
 ### ConnectionString in appsettings.json:
 ```csharp
 {
   "ConnectionStrings": {
-    "CruddyDB": "Server=.;Database=CruddyDB;MultipleActiveResultSets=True;Trusted_Connection=True;TrustServerCertificate=True"
+    "CruddyModelDB": "Server=.;Database=CruddyModelDB;MultipleActiveResultSets=True;Trusted_Connection=True;TrustServerCertificate=True"
   },
-  "Cruddy": {
+  "CruddyModel": {
     "DefaultDateFormat": "d",
     "DefaultDateTimeFormat": "g",
     "DefaultTimeFormat": "t",
@@ -61,7 +64,7 @@ public static void Main(string[] args)
 
     builder.Services.AddScoped(serviceProvider =>
     {
-        return new SqlConnection(builder.Configuration.GetConnectionString("CruddyDB"));
+        return new SqlConnection(builder.Configuration.GetConnectionString("CruddyModelDB"));
     });
     ...  
 ```
@@ -75,14 +78,14 @@ public static void Main(string[] args)
 <h3>Table Customers</h3>
 
 <h4>TableColumns="*"</h4>
-<Cruddy TEntity="Models.Customer" AllowCrud="true" DbConnection="dbConnection" HideKeyColumn="true" />
+<CruddyModel TEntity="Models.Customer" AllowCrud="true" DbConnection="dbConnection" HideKeyColumn="true" />
 
 @code {
 }
 ```
 
 The razor file above will result in this QuickGrid:
-<img src="Docs/TableCustomersCruddy.png" alt="Cruddy example" width="800" />
+<img src="Docs/TableCustomersCruddy.png" alt="CruddyModel example" width="800" />
 
 Models.Customer:
 ```csharp   
@@ -107,15 +110,15 @@ public class Customer
     public DateTime Birthdate { get; set; }
 }
 ```
-**Key**: If the model class has a property with the attribute [Key], Cruddy will use that property as the primary key column. 
-If no property has the [Key] attribute, Cruddy will try to find a property named "Id" or "{ClassName}Id" and use that as the primary key column.
+**Key**: If the model class has a property with the attribute [Key], CruddyModel will use that property as the primary key column. 
+If no property has the [Key] attribute, CruddyModel will try to find a property named "Id" or "{ClassName}Id" and use that as the primary key column.
 Or use the KeyColumn parameter to specify the primary key column name.
 
-<img src="Docs/TableCustomers.png" alt="Cruddy example" width="400" />
-<img src="Docs/Details.png" alt="Cruddy Details" width="800" />
-<img src="Docs/Edit.png" alt="Cruddy Edit" width="800" />
-<img src="Docs/Create.png" alt="Cruddy Create" width="800" />
-<img src="Docs/Delete.png" alt="Cruddy Delete" width="800" />
+<img src="Docs/TableCustomers.png" alt="CruddyModel example" width="400" />
+<img src="Docs/Details.png" alt="CruddyModel Details" width="800" />
+<img src="Docs/Edit.png" alt="CruddyModel Edit" width="800" />
+<img src="Docs/Create.png" alt="CruddyModel Create" width="800" />
+<img src="Docs/Delete.png" alt="CruddyModel Delete" width="800" />
 
 ### Most simple use (no CRUD):
 ```razor
@@ -125,7 +128,7 @@ Or use the KeyColumn parameter to specify the primary key column name.
 <h3>Table Products</h3>
 
 <h4>Simple as possible</h4>
-<Cruddy TEntity="Models.Product" DbConnection="dbConnection" />
+<CruddyModel TEntity="Models.Product" DbConnection="dbConnection" />
 
 @code {}
 ```
@@ -138,14 +141,14 @@ Or use the KeyColumn parameter to specify the primary key column name.
 <h3>Select into any POCO class</h3>
 
 <h4>SELECT Id, Name, LTRIM(STR(Price)) AS Info FROM Products</h4>
-<Cruddy TEntity="Models.AnyPoco" Select="SELECT Id, Name, LTRIM(STR(Price)) AS Info FROM Products" DbConnection="dbConnection" />
+<CruddyModel TEntity="Models.AnyPoco" Select="SELECT Id, Name, LTRIM(STR(Price)) AS Info FROM Products" DbConnection="dbConnection" />
 
 @code {}
 ```
 
 ### SQL example with INNER JOIN:
 ```razor
-<Cruddy TEntity="Models.OrderCruddy" TableName="Orders" TableColumns="Id, CustomerName, ProductName, Qty, Paid, OrderDate" Select=@sql DbConnection="dbConnection" />
+<CruddyModel TEntity="Models.OrderCruddy" TableName="Orders" TableColumns="Id, CustomerName, ProductName, Qty, Paid, OrderDate" Select=@sql DbConnection="dbConnection" />
 
 @code {
     string sql = @"
@@ -158,7 +161,7 @@ Or use the KeyColumn parameter to specify the primary key column name.
 
 Note how attribute Key, DisplayName and DisplayFormat are used in the model classes.
 
-## Database related parameters - CruddyBase.cs:
+## Database related parameters - CruddyModelBase.cs:
 
 | Parameter | Description |
 |-----------|-------------|
@@ -175,9 +178,9 @@ Note how attribute Key, DisplayName and DisplayFormat are used in the model clas
 | SortOrder | Sorting order for OrderBy (Ascending / Descending). |
 | Select | If provided, this full SQL SELECT statement will be used instead of the generated one. |
 | DbConnection | An ADO.NET DbConnection (e.g. SqlConnection) used by Dapper to query and modify the database. |
-| FKeys | Foreign key info in format "FKey: PrimaryTable, PrimaryId, PrimaryDisplay; FKey2: ...". Or just the foreign key column name(s) and Cruddy will try to guess the rest. |
+| FKeys | Foreign key info in format "FKey: PrimaryTable, PrimaryId, PrimaryDisplay; FKey2: ...". Or just the foreign key column name(s) and CruddyModel will try to guess the rest. |
 
-## UI and formatting related parameters - Cruddy.razor.cs:
+## UI and formatting related parameters - CruddyModel.razor.cs:
 
 Note: All parameters below can be set in appsettings.json file. 
 The value in appsettings.json will be used as default, but can be overridden by setting the parameter in the component.
@@ -211,11 +214,11 @@ If the parameter is not set in appsettings.json or in the component, the default
 
 ## Get Started
 
-- Create database CruddyDB
-- Run script CruddyDB test database.sql
-- Compile and run CruddyDemo project
+- Create database CruddyModelDB
+- Run script CruddyModelDB test database.sql
+- Compile and run CruddyModelDemo project
 
 ## Known issues
 - Only tested with MS SQL Server - but should work with any database that Dapper supports
 - Method DapperRepository.Add() will need more work for other databases than MS SQL Server
-- Cruddy does not support composite primary keys (no plans for this in version 1)
+- CruddyModel does not support composite primary keys (no plans for this in version 1)
