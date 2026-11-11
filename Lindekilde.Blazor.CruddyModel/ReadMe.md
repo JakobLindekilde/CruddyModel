@@ -1,7 +1,7 @@
 ﻿# CruddyModel
 
 ## About
-A simple ASP.NET Blazor component that could do CRUD operations 
+A simple ASP.NET Blazor component that can do CRUD operations 
 on any database table using a model class or record. 
 
 ## Key Features
