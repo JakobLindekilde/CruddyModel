@@ -1,16 +1,16 @@
-# Copilot instructions for Cruddy
+# Copilot instructions for CruddyModel
 
-These repository instructions guide GitHub Copilot (and other AI assistants) when working in Cruddy component library.
+These repository instructions guide GitHub Copilot (and other AI assistants) when working in CruddyModel component library.
 
 ## Project overview
 
-`Cruddy` is a simple ASP.NET Blazor component that does database table CRUD.
+`CruddyModel` is a simple ASP.NET Blazor component that does database table CRUD.
 
-The solution (`CruddyDemo.slnx`) contains three projects:
+The solution (`CruddyModelDemo.slnx`) contains three projects:
 
-- `Lindekilde.Blazor.Cruddy` — The Cruddy component library.
-- `Lindekilde.Blazor.Cruddy.Tests` — A unit test project for the component library, using xunit.v3 and `Microsoft.Testing.Platform` runner.
-- `CruddyDemo` — A Blazor Web App project that uses the `Cruddy` component to demonstrate its functionality.
+- `Lindekilde.Blazor.CruddyModel` — The CruddyModel component library.
+- `Lindekilde.Blazor.CruddyModel.Tests` — A unit test project for the component library, using xunit.v3 and `Microsoft.Testing.Platform` runner.
+- `CruddyModelDemo` — A Blazor Web App project that uses the `CruddyModel` component to demonstrate its functionality.
 
 ## Target framework & dependencies
 
