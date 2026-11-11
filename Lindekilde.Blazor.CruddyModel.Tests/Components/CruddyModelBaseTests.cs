@@ -2,6 +2,7 @@
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 
 using Lindekilde.Blazor.CruddyModel.Components;
+using Lindekilde.Blazor.CruddyModel.Repositories;
 using Lindekilde.Blazor.CruddyModel.Tests.Models;
 
 namespace Lindekilde.Blazor.CruddyModel.Tests.Components;
@@ -517,7 +518,7 @@ public class CruddyModelBaseTests
     public void Update_ExecutesUpdateSqlWithParameters()
     {
         var db = new FakeDbConnection { NonQueryResult = 1 };
-        var dut = new CruddyModelBase<Person> { DbConnection = db };
+        var dut = new CruddyModelBase<Person> { DbConnection = db, RepositoryFactory = new DapperRepositoryFactory() };
 
         var result = dut.Update(new Person { Id = 5, Name = "Bob", Description = "D", Email = "b@x.dk" }, 5);
 
@@ -541,6 +542,7 @@ public class CruddyModelBaseTests
         var dut = new CruddyModelBase<Person>
         {
             DbConnection = db,
+            RepositoryFactory = new DapperRepositoryFactory(),
             DefaultSchema = "sales",
             TableName = "People",
             TableColumns = "Id, Name"
@@ -555,7 +557,7 @@ public class CruddyModelBaseTests
     public void Update_NoMatchingProperties_ReturnsZeroAndExecutesNothing()
     {
         var db = new FakeDbConnection();
-        var dut = new CruddyModelBase<Person> { DbConnection = db, TableColumns = "Id" };
+        var dut = new CruddyModelBase<Person> { DbConnection = db, TableColumns = "Id", RepositoryFactory = new DapperRepositoryFactory() };
 
         var result = dut.Update(new Person { Id = 2, Name = "Eve" }, 2);
 
@@ -578,7 +580,7 @@ public class CruddyModelBaseTests
     public void Create_ReturnsScalarIdentity()
     {
         var db = new FakeDbConnection { ScalarResult = 77 };
-        var dut = new CruddyModelBase<Person> { DbConnection = db };
+        var dut = new CruddyModelBase<Person> { DbConnection = db, RepositoryFactory = new DapperRepositoryFactory() };
 
         var result = dut.Create(new Person { Name = "Bob", Email = "b@x.dk" });
 
@@ -595,7 +597,7 @@ public class CruddyModelBaseTests
     public void Create_IncludesKeyWhenAllowed()
     {
         var db = new FakeDbConnection();
-        var dut = new CruddyModelBase<Person> { DbConnection = db, AllowKeyColumnEditOnCreate = true };
+        var dut = new CruddyModelBase<Person> { DbConnection = db, AllowKeyColumnEditOnCreate = true, RepositoryFactory = new DapperRepositoryFactory() };
 
         dut.Create(new Person { Id = 9, Name = "Bob" });
 
@@ -607,7 +609,7 @@ public class CruddyModelBaseTests
     public void Create_WhenScalarFails_FallsBackToRowsAffected()
     {
         var db = new FakeDbConnection { ThrowOnScalar = true, NonQueryResult = 1 };
-        var dut = new CruddyModelBase<Person> { DbConnection = db };
+        var dut = new CruddyModelBase<Person> { DbConnection = db, RepositoryFactory = new DapperRepositoryFactory() };
 
         var result = dut.Create(new Person { Name = "Bob" });
 
@@ -624,7 +626,7 @@ public class CruddyModelBaseTests
     public void Delete_ExecutesDeleteSql()
     {
         var db = new FakeDbConnection { ScalarResult = null };
-        var dut = new CruddyModelBase<Person> { DbConnection = db };
+        var dut = new CruddyModelBase<Person> { DbConnection = db, RepositoryFactory = new DapperRepositoryFactory() };
 
         var result = dut.Delete(3);
 
@@ -643,7 +645,7 @@ public class CruddyModelBaseTests
     {
         var db = new FakeDbConnection();
         db.Rows.Add(new Dictionary<string, object?> { ["Id"] = 4, ["Name"] = "Ann", ["Description"] = null, ["Email"] = "a@x.dk" });
-        var dut = new CruddyModelBase<Person> { DbConnection = db };
+        var dut = new CruddyModelBase<Person> { DbConnection = db, RepositoryFactory = new DapperRepositoryFactory() };
 
         var row = dut.GetTableRow(4);
 
@@ -661,7 +663,7 @@ public class CruddyModelBaseTests
     public void GetTableRow_UsesColumnsParameter()
     {
         var db = new FakeDbConnection();
-        var dut = new CruddyModelBase<Person> { DbConnection = db };
+        var dut = new CruddyModelBase<Person> { DbConnection = db, RepositoryFactory = new DapperRepositoryFactory() };
 
         dut.GetTableRow(1, "Id, Name");
 
@@ -671,7 +673,7 @@ public class CruddyModelBaseTests
     [Fact]
     public void GetTableRow_NotFound_ReturnsNull()
     {
-        var dut = new CruddyModelBase<Person> { DbConnection = new FakeDbConnection() };
+        var dut = new CruddyModelBase<Person> { DbConnection = new FakeDbConnection(), RepositoryFactory = new DapperRepositoryFactory() };
         Assert.Null(dut.GetTableRow(123));
     }
 
@@ -691,7 +693,7 @@ public class CruddyModelBaseTests
         var db = new FakeDbConnection();
         db.Rows.Add(new Dictionary<string, object?> { ["Id"] = 1, ["Name"] = "A" });
         db.Rows.Add(new Dictionary<string, object?> { ["Id"] = 2, ["Name"] = "B" });
-        var dut = new TestableCruddy<Person> { DbConnection = db, TableColumns = "Id, Name", Top = 5 };
+        var dut = new TestableCruddy<Person> { DbConnection = db, TableColumns = "Id, Name", Top = 5, RepositoryFactory = new DapperRepositoryFactory() };
 
         await dut.InitializeAsync();
 
@@ -705,7 +707,7 @@ public class CruddyModelBaseTests
     [Fact]
     public async Task OnInitializedAsync_NoRows_LoadsEmptyList()
     {
-        var dut = new TestableCruddy<Person> { DbConnection = new FakeDbConnection() };
+        var dut = new TestableCruddy<Person> { DbConnection = new FakeDbConnection(), RepositoryFactory = new DapperRepositoryFactory() };
 
         await dut.InitializeAsync();
 

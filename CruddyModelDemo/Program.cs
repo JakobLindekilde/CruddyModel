@@ -1,4 +1,5 @@
 using CruddyModelDemo.Components;
+using Lindekilde.Blazor.CruddyModel.Repositories;
 using Microsoft.Data.SqlClient;
 
 namespace CruddyModelDemo;
@@ -9,6 +10,7 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.Services.AddSingleton<IRepositoryFactory, DapperRepositoryFactory>();
         builder.Services.AddScoped(serviceProvider =>
         {
             return new SqlConnection(builder.Configuration.GetConnectionString("CruddyModelDB"));

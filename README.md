@@ -56,18 +56,23 @@ Note: There are more examples in the CruddyModelDemo project.
 }
 ```
 
-### First add SqlConnection in Program.cs:
+### First register the repository factory and SqlConnection in Program.cs:
 ```csharp
+using Lindekilde.Blazor.CruddyModel.Repositories;
+
 public static void Main(string[] args)
 {
     var builder = WebApplication.CreateBuilder(args);
 
+    builder.Services.AddSingleton<IRepositoryFactory, DapperRepositoryFactory>();
     builder.Services.AddScoped(serviceProvider =>
     {
         return new SqlConnection(builder.Configuration.GetConnectionString("CruddyModelDB"));
     });
     ...  
 ```
+
+The factory is stateless; the component still uses the `DbConnection` passed to it. To use a different repository implementation, register your own `IRepositoryFactory` instead.
 
 ### Typical use - file Customers.razor:
 

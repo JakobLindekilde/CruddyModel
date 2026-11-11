@@ -251,10 +251,16 @@ public partial class CruddyModelBase<TEntity> : ComponentBase where TEntity : cl
     }
 
     /// <summary>
+    /// Factory used to create repositories for database operations.
+    /// </summary>
+    [Inject]
+    public IRepositoryFactory RepositoryFactory { get; set; } = default!;
+
+    /// <summary>
     /// The repository used for all database operations.
     /// </summary>
     protected IRepository<TEntity> Repository =>
-        new DapperRepository<TEntity>(DbConnection, DefaultSchema, TableName, KeyColumn);
+        RepositoryFactory.Create<TEntity>(DbConnection, DefaultSchema, TableName, KeyColumn);
 
     /// <summary>
     /// A dictionary that maps the column names specified in <seealso cref="TableColumns"/> 
